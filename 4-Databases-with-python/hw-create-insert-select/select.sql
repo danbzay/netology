@@ -78,6 +78,11 @@ WHERE artist_id IN (SELECT artist_id
 
 --Наименования треков, которые не входят в сборники.
 
+-- Вот чем это лучше?
+SELECT song_title FROM songs LEFT JOIN collections_songs USING(song_id)
+WHERE collection_id IS NULL;
+
+-- Чем это
 SELECT song_title FROM songs 
 WHERE song_id NOT IN (SELECT song_id FROM collections_songs);
 
