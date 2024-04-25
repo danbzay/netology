@@ -1,2 +1,2 @@
-
-print('salary.py')
+def salary():
+    print('salary')

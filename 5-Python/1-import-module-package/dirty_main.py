@@ -1,4 +1,4 @@
-import datetime
+from datetime import *
 from application import salary
 from application.db import people
 
