@@ -71,30 +71,41 @@ def json_to_base(filename, session):
     session.add_all(base_data)
     session.commit()
 
+def print_books_by_publisher(session):
+    print("\nВведите часть имени или id издателя чтобы увидеть какие изданные"
+          + "им книги есть в нашей базе. 'q' для выхода, <Enter> - весь список."
+          + "\nСписок издателей:")
+    q = session.query(Publisher)
+    print('\n'.join(f'id: {_.pk}, Имя: {_.name}' for _ in q.all()))
+    while True:
+        pub = input()
+        if pub == 'q':
+            break
+        q = session.query(Book, Shop, Sale, Publisher).filter(
+                Book.pk == Stock.id_book).filter(
+                Shop.pk == Stock.id_shop).filter(
+                Sale.id_stock == Stock.pk).filter(
+                Publisher.pk == Book.id_publisher).filter(
+                    Publisher.pk == int(pub) if pub.isdigit() else
+                    Publisher.name.like('%' + pub + '%'))
+        print('\n'.join(f'{_[0].title :<40} | {_[1].name :<10} | ' 
+              + f'{str(_[2].price) :<8} | {_[2].date_sale.strftime("%d-%m-%Y")}'
+              for _ in q.all()))
 
 
-DSN = "postgresql://postgres:postgres@localhost:5432/books"
-engine = sq.create_engine(DSN)
-create_tables(engine)
+if __name__ == '__main__':
 
-# сессия
-Session = sessionmaker(bind=engine)
-session = Session()
+    DSN = "postgresql://postgres:postgres@localhost:5432/books"
+    engine = sq.create_engine(DSN)
+    create_tables(engine)
 
-#заполняем базу
-json_to_base('tests_data.json', session)
+    # сессия
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-print('Введите издателя, или его часть, но в наличии только такие:')
-q = session.query(Publisher)
-print(', '.join(_.name for _ in q.all()))
-pub = input()
-# print(b.name
-q = session.query(Book, Shop, Sale, Publisher).filter(
-        Book.pk == Stock.id_book).filter(
-        Shop.pk == Stock.id_shop).filter(
-        Sale.id_stock == Stock.pk).filter(
-        Publisher.pk == Book.id_publisher).filter(
-        Publisher.name.like('%' + pub + '%'))
-print('\n'.join(_[0].title + ' | ' + _[1].name + ' | ' + str(_[2].price) 
-    + ' | ' + str(_[2].date_sale) for _ in q.all()))
-session.close()
+    #заполняем базу
+    json_to_base('tests_data.json', session)
+
+    # Выводим издателя по имени или id
+    print_books_by_publisher(session)
+    session.close()
