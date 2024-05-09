@@ -4,20 +4,20 @@ from telebot import types, TeleBot, custom_filters
 from telebot.storage import StateMemoryStorage
 from telebot.handler_backends import State, StatesGroup
 
-import os.path  
-import configparser
+from englishcards.database import EnglishCardsDB
+#import englishcards.database
 
+print('Start telegram bot...')
 
-def run_telegram_bot(config):
-    print('Start telegram bot...')
-    token_bot = config['telegram']['token']
-    state_storage = StateMemoryStorage()
-    bot = TeleBot(token_bot, state_storage=state_storage)
-    known_users = []
-    userStep = {}
-    buttons = []
+state_storage = StateMemoryStorage()
+db = EnglishCardsDB()
+#token_bot = '7107066093:AAHEuNUFakBFIHYTejwMShSZkZWgcmOBv94'
+bot = TeleBot(db.get_token('telegram'), state_storage=state_storage)
 
-
+active_users = []
+userStep = {}
+buttons = []
+    
 class Command:
     ADD_WORD = 'Добавить слово ➕'
     DELETE_WORD = 'Удалить слово🔙'
@@ -29,12 +29,15 @@ class MyStates(StatesGroup):
     translate_word = State()
     another_words = State()
 
-
 def get_user_step(uid):
+    if uid not in active_users:
+        step = active_users.append(uid)
+
     if uid in userStep:
+
         return userStep[uid]
     else:
-        known_users.append(uid)
+        db.select('teleusers', 'uid', long(cid))
         userStep[uid] = 0
         print("New user detected, who hasn't used \"/start\" yet")
         return 0
@@ -42,11 +45,27 @@ def get_user_step(uid):
 
 @bot.message_handler(commands=['cards', 'start'])
 def create_cards(message):
-    cid = message.chat.id
-    if cid not in known_users:
-        known_users.append(cid)
-        userStep[cid] = 0
-        bot.send_message(cid, "Hello, stranger, let study English...")
+    uid = message.chat.id
+    if uid not in active_users:
+        bot.send_message(uid, 'Здравствуйте, ' 
+            + message.from_user.first_name + ', let study English...')
+        db.insert('teleusers', 'uid', long(uid))
+        active_users.append(uid)
+        step = db.get_one(sql.SQL(
+            'SELECT step FROM teleusers WHERE uid = {};').format(
+                sql.Literal(uid)))
+        if step == None:
+            # устанавливаем дефолтные значения для нового пользователя
+            step = 0
+            words[uid] = db.get_all("""
+                SELECT words.en, words.ru, words.example, teleusers_words.step
+                FROM words, teleusers WHERE teleuser.uid = 0;""")
+            db.set(sql.SQL("""
+                INSERT INTO teleusers VALUES ({}, 0);
+                INSERT INTO teleusers_words VALUES {};""").format(
+                    sql.Literal(uid), sql.Literal(words)))
+        userStep[uid] = get_user_step(uid)
+
     markup = types.ReplyKeyboardMarkup(row_width=2)
 
     target_word = 'Peace'
@@ -104,11 +123,8 @@ def message_reply(message):
     bot.send_message(message.chat.id, target_word, reply_markup=markup)
 
 
-# bot.add_custom_filter(custom_filters.StateFilter(bot))
 
-# bot.infinity_polling(skip_pending=True)
-
-if __name__ == '__main__':
-    congig = configparser.ConfigParser()
-    config.read('/../config.ini')
-    run_telegram_bot(config)
+def run_bot():
+    bot.add_custom_filter(custom_filters.StateFilter(bot))
+    bot.infinity_polling(skip_pending=True)
+    print('finised')
