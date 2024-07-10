@@ -1,0 +1,16 @@
+2024-07-10 16:22:52.624384 
+function: hello_world 
+args:(), kwargs: {} 
+result='Hello World' 
+2024-07-10 16:22:52.624414 
+function: summator 
+args:(2, 2), kwargs: {} 
+result=4 
+2024-07-10 16:22:52.624435 
+function: div 
+args:(6, 2), kwargs: {} 
+result=3.0 
+2024-07-10 16:22:52.624456 
+function: summator 
+args:(4.3,), kwargs: {'b': 2.2} 
+result=6.5 
