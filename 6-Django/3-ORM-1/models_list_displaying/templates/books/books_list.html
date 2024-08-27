@@ -17,11 +17,13 @@
             </div>
         {% endfor %}
         {% if page.has_prevous %}
-            <a href="{{ page.prevous_date|date:'Y-m-d' }}">⟵</a>
+            <a href="{{ page.prevous_date|date:'Y-m-d' }}"
+                >< {{ page.prevous_date|date:'Y-m-d' }} </a>
         {% endif %}
-        <a href="">{{ page.pub_date }}</a>
+        {{ page.pub_date }}
         {% if page.has_next %}
-            <a href="{{ page.next_date|date:'Y-m-d' }}">⟶</a>
+            <a href="{{ page.next_date|date:'Y-m-d' }}"
+               > {{ page.next_date|date:'Y-m-d' }} ></a>
         {% endif %}
     </div>
 {% endblock %}
