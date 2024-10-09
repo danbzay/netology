@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from advertisements.models import Advertisement
+from advertisements.models import Advertisement,AdvertisementStatusChoices
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer для пользователя."""
+    # Serializer для пользователя.
 
     class Meta:
         model = User
@@ -14,19 +14,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
-    """Serializer для объявления."""
+    # Serializer для объявления.
 
-    creator = UserSerializer(
-        read_only=True,
-    )
+    creator = UserSerializer(read_only=True,)
 
     class Meta:
         model = Advertisement
-        fields = ('id', 'title', 'description', 'creator',
-                  'status', 'created_at', )
+        fields = ('id', 'title', 'description', 'creator', 'status', 
+                  'created_at', )
 
     def create(self, validated_data):
-        """Метод для создания"""
+        # Метод для создания
 
         # Простановка значения поля создатель по-умолчанию.
         # Текущий пользователь является создателем объявления
@@ -38,8 +36,19 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def validate(self, data):
-        """Метод для валидации. Вызывается при создании и обновлении."""
+        # Метод для валидации. Вызывается при создании и обновлении.
 
         # TODO: добавьте требуемую валидацию
+        if (
+                Advertisement.objects.filter(
+                    creator=self.context['request'].user, 
+                    status=AdvertisementStatusChoices.OPEN
+                    ).count() >= 10
+                and ('status' not in data 
+                     or data['status'] != AdvertisementStatusChoices.CLOSED)
+            ):
+            raise serializers.ValidationError(
+                    'Нельзя иметь больше 10 открытых объявлений')
 
         return data
+
