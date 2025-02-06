@@ -1,10 +1,14 @@
 class Game {
   constructor(container) {
     this.container = container;
+    this.statusBar = container.querySelector('.status');
+    this.statusBar.innerHTML += 
+        '<p>Времени осталось: <span id = "timer"></span>';
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
-
+    this.timer = this.statusBar.querySelector("#timer");
+    this.timerInterval = null;
     this.reset();
 
     this.registerEvents();
@@ -25,10 +29,24 @@ class Game {
       При неправильном вводе символа - this.fail();
       DOM-элемент текущего символа находится в свойстве this.currentSymbol.
      */
+
+     addEventListener('keydown', (e) => {
+       console.log(e.key, this.currentSymbol.innerText);
+     if (!e.ctrlKey) {
+       if (e.key.toLowerCase() == this.currentSymbol.innerText.toLowerCase()) {
+         this.success();
+       } else { 
+         this.fail();
+       }
+     }
+       
+     });
+       
   }
 
   success() {
-    if(this.currentSymbol.classList.contains("symbol_current")) this.currentSymbol.classList.remove("symbol_current");
+    if (this.currentSymbol.classList.contains("symbol_current")) 
+      this.currentSymbol.classList.remove("symbol_current");
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
 
@@ -40,31 +58,41 @@ class Game {
     if (++this.winsElement.textContent === 10) {
       alert('Победа!');
       this.reset();
+    } else {
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   fail() {
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
       this.reset();
+    } else {
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   setNewWord() {
     const word = this.getWord();
-
     this.renderWord(word);
+    this.timer.textContent = word.length;
+    this.timerInterval = setInterval(() => {
+        if(--this.timer.textContent < 0) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+          this.fail();
+        }
+      }, 1000);
   }
+
 
   getWord() {
     const words = [
-        'bob',
-        'awesome',
-        'netology',
-        'hello',
-        'kitty',
+        'кот bob',
+        'awesome кот',
+        'котology',
+        'hello э',
+        'kitty кэт',
         'rock',
         'youtube',
         'popcorn',
