@@ -1,0 +1,3 @@
+[submodule "8-JavaScript-advanced/1-workspace/defender-game"]
+	path = 8-JavaScript-advanced/1-workspace/defender-game
+	url = git@github.com:danbzay/defender-game.git

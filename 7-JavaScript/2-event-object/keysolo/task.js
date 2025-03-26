@@ -73,13 +73,13 @@ class Game {
   }
 
   setNewWord() {
+    clearInterval(this.timerInterval);
+    this.timerInterval = null;
     const word = this.getWord();
     this.renderWord(word);
     this.timer.textContent = word.length;
     this.timerInterval = setInterval(() => {
         if(--this.timer.textContent < 0) {
-          clearInterval(this.timerInterval);
-          this.timerInterval = null;
           this.fail();
         }
       }, 1000);

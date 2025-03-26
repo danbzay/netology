@@ -1,11 +1,13 @@
 const cart = document.querySelector('.cart');
+let storage = JSON.parse(localStorage.getItem('cart'));
 
-if (localStorage.length > 0) {
-  for (const id in {...localStorage}) {
-    addProductToCart(id, localStorage.getItem(id));
-  }
-} else {
+if (storage == null) {
   cart.style.display = 'none';
+  storage = {};
+} else {
+  for (const id in storage) {
+    addProductToCart(id, storage[id]);
+  }
 }
 
 const products = document.querySelectorAll('.product');
@@ -46,8 +48,9 @@ function addProductToCart(id, quantity, image = null) {
     remover.style.cursor = 'pointer';
     remover.addEventListener('click', () => {
       cartProduct.remove();
-      localStorage.removeItem(id);
-      if (localStorage.length == 0) cart.style.display ='none';
+      delete storage[id];
+      localStorage.setItem('cart', JSON.stringify(storage));
+      if (Object.keys(storage).length == 0) cart.style.display ='none';
     });
     cartProduct.append(img, count, remover);
     cart.querySelector('.cart__products').append(cartProduct);
@@ -55,9 +58,10 @@ function addProductToCart(id, quantity, image = null) {
     count = cart.querySelector(`[data-id="${id}"] .cart__product-count`);
     count.textContent = Number(count.textContent) + Number(quantity);
   }
-  localStorage.setItem(id, count.textContent);
+  storage[id] = count.textContent;
+  localStorage.setItem('cart', JSON.stringify(storage));
   if (image != null) {
-    if (typeof img =='undefined') {
+    if (typeof img == 'undefined') {
       img = cart.querySelector(`[data-id="${id}"] img`);
      } 
     flyImage(image, img);
