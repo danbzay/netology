@@ -9,4 +9,4 @@
 	url = git@github.com:danbzay/node-test.git
 [submodule "8-JavaScript-advanced/4-test-ci/test-ci"]
 	path = 8-JavaScript-advanced/4-test-ci/test-ci
-	url = git@github.com:danbzay/not-ci.git
+	url = git@github.com:danbzay/test-ci.git
