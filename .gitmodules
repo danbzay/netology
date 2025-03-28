@@ -1,3 +1,9 @@
 [submodule "8-JavaScript-advanced/1-workspace/defender-game"]
 	path = 8-JavaScript-advanced/1-workspace/defender-game
 	url = git@github.com:danbzay/defender-game.git
+[submodule "8-JavaScript-advanced/3-platforms/ajs"]
+	path = 8-JavaScript-advanced/3-platforms/ajs
+	url = git@github.com:danbzay/ajs.git
+[submodule "8-JavaScript-advanced/3-platforms/node-test"]
+	path = 8-JavaScript-advanced/3-platforms/node-test
+	url = git@github.com:danbzay/node-test.git
