@@ -7,3 +7,6 @@
 [submodule "8-JavaScript-advanced/3-platforms/node-test"]
 	path = 8-JavaScript-advanced/3-platforms/node-test
 	url = git@github.com:danbzay/node-test.git
+[submodule "8-JavaScript-advanced/4-test-ci/test-ci"]
+	path = 8-JavaScript-advanced/4-test-ci/test-ci
+	url = git@github.com:danbzay/not-ci.git
