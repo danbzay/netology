@@ -1,5 +1,14 @@
 import {Character, Bowman, Swordsman, Magician, Daemon, Undead, Zombie, 
-  } from '../app';
+ } from '../app';
+
+const characters = [
+  [Bowman, 25, 25],
+  [Swordsman, 40, 10],
+  [Magician, 10, 40],
+  [Daemon, 10, 40],
+  [Undead, 25, 25],
+  [Zombie, 40,10]
+];
 
 test.each([
   ['a', 'Bowman', 'incorrect name'],
@@ -12,11 +21,11 @@ test.each([
 });
 
 test('corect character', () => {
-  expect(new Character('Ivan', 'Bowman')).toEqual({name: 'Ivan', 
+  expect(new Bowman('Ivan')).toEqual({name: 'Ivan', 
     type: 'Bowman', health: 100, level: 1, attack: 25, defence: 25});
 });
 
-let testCharacter = new Character('Ivan', 'Bowman');
+let testCharacter = new Bowman('Ivan');
 
 test('correct level up', () => {
   testCharacter.levelUp();
@@ -42,15 +51,6 @@ test('no negative health', () => {
   testCharacter.damage(10);
   expect(testCharacter.health).toBe(0);
 });
-
-const characters = [
-  [Bowman, 25, 25],
-  [Swordsman, 40, 10],
-  [Magician, 10, 40],
-  [Daemon, 10, 40],
-  [Undead, 25, 25],
-  [Zombie, 40,10]
-];
 
 test.each(characters)('inheritances', (charClass, attack, defence) => {
   testCharacter = new charClass('Ivan');
