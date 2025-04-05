@@ -7,7 +7,18 @@ const characters = [ivan, pyotr, vasiliy];
 
 const testTeam = new Team();
 
-test('test add', () => {
-  expect(testTeam.add(ivan).toHaveProperty('members', Equal , [{name='Ivan', otherProperties = 'default'}]]
-  [[characters, ivan], characters]
+test('test add', ()=> {
+  testTeam.add(ivan);
+  expect(testTeam.toArray()).toEqual([ivan]);
+});
 
+test('test add error', () => {
+  expect( () => {
+    testTeam.add(ivan);
+  }).toThrowError('already membered');
+ });
+
+test('test add all', () => {
+  testTeam.addAll(ivan, ... characters);
+  expect(testTeam.toArray()).toEqual(characters);
+});

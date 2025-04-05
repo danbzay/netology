@@ -1,7 +1,7 @@
 export class Character {
   constructor(name, otherProperties = 'default') {
     this.name = name;
-    this.other properties = otherProperties;
+    this.otherProperties = otherProperties;
   }
 }
 
@@ -11,11 +11,14 @@ export class Team {
   }
 
   add(member) {
+    if (this.members.has(member)) {
+      throw new Error('already membered');
+    }
     this.members.add(member)
   }
 
   addAll(...members) {
-    for (member of members) {
+    for (let member of members) {
       this.members.add(member);
     }
   }
@@ -23,4 +26,15 @@ export class Team {
   toArray() {
     return Array.from(this.members);
   }
+}
+
+class ErrorRepository {
+  constructor() {
+    this.repository = new Map();
+  }
+
+  translate(code) {
+    return this.repository[code];
+  }
+
 }
