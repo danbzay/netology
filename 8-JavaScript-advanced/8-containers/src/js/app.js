@@ -28,13 +28,32 @@ export class Team {
   }
 }
 
-class ErrorRepository {
+export class ErrorRepository {
   constructor() {
-    this.repository = new Map();
+    this.repository = new Map([[1,'one'],[2, 'two'],[3,'three']] );
   }
 
   translate(code) {
-    return this.repository[code];
+    let result = this.repository.get(code);
+    if (result == undefined) {
+      result = 'Unknown error';
+    }
+    return result;
   }
+}
 
+export class Settings {
+  constructor(userSettings) {
+    this.possible = {
+      'theme': ['dark', 'light'], 
+      'music': ['trance', 'pop', 'rock', 'chillout', 'off'],
+      'difficulty': ['easy', 'normal', 'hard', 'nightmare'],
+    };
+    this.defaultSettings = new Map(Object.entries(this.possible)
+      .map(([x,y]) => [x, y[0]]));
+    this.userSettings = new Map(Object.entries(userSettings));
+  }
+  get settings() {
+    return new Map([...this.defaultSettings, ...this.userSettings]);
+  }
 }
