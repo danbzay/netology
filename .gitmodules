@@ -12,4 +12,4 @@
 	url = git@github.com:danbzay/test-ci.git
 [submodule "9-JavaScript-browser/1-environment/env"]
 	path = 9-JavaScript-browser/1-environment/env
-	url = https://github.com/danbzay/env
+	url = git@github.com:danbzay/env.git
