@@ -31,8 +31,8 @@ jobs:
         echo ${{ matrix.page-path }}dist/
         echo ${{ steps.deployment.outputs.page_url }}${{ matrix.page-url }}
         cd ${{ matrix.page-path }}        
-#        npm install webpack webpack-cli html-webpack-plugin
-#        npx webpack
+        npm install webpack webpack-cli html-webpack-plugin
+        npx webpack
         
     - name: Upload generated files as artifact
       uses: actions/upload-pages-artifact@v3
