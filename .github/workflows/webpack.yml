@@ -3,8 +3,8 @@ name: Multiple Homeworks Publishing
 on:
   push:
     branches: [ "main" ]
-    paths: 
-      - '9-JavaScript-browser'
+    #paths: 
+    #  - '9-JavaScript-browser'
       
 jobs:
   build:
