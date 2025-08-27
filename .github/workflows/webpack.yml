@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: |
         cd 9-JavaScript-browser/2-DOM/hit-game/        
-        npm install webpack webpacl-cli html-webpack-plugin
+        npm install webpack webpack-cli html-webpack-plugin
         npx webpack
         
     - name: Upload generated files as artifact
