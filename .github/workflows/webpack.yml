@@ -13,6 +13,10 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
+        pages: 
+          - path: '9-JavaScript-browser/2-DOM/hit-game/'
+          - url: 'hit-game'
+            
 
     steps:
     - uses: actions/checkout@v4
@@ -24,7 +28,7 @@ jobs:
 
     - name: Build
       run: |
-        cd 9-JavaScript-browser/2-DOM/hit-game/        
+        cd ${{ matrix.pages.path }}        
         npm install webpack webpack-cli html-webpack-plugin
         npx webpack
         
@@ -32,7 +36,7 @@ jobs:
       uses: actions/upload-pages-artifact@v3
       id: deployment
       with:
-        path: 9-JavaScript-browser/2-DOM/hit-game/dist/
+        path: ${{ matrix.pages.path }}dist/
           
   deploy:
     needs: build
@@ -42,7 +46,7 @@ jobs:
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}${{ matrix.pages-sourses.url }}
 
     runs-on: ubuntu-latest
     steps:
