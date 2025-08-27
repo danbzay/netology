@@ -26,6 +26,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Make folder
+      run: mkdir -p ${{ github.path }}dist/${{ matrix.page-url }}
+
     - name: Build
       run: |
         echo ${{ matrix.page-path }}dist/
@@ -33,12 +36,13 @@ jobs:
         cd ${{ matrix.page-path }}        
         npm install webpack webpack-cli html-webpack-plugin
         npx webpack
+        cp -r dist/* ${{ github.path }}dist/${{ matrix.page-url }}
         
     - name: Upload generated files as artifact
       uses: actions/upload-pages-artifact@v3
       id: deployment
       with:
-        path: ${{ matrix.page-path }}dist/
+        path: ${{ github.path }}dist
           
   deploy:
     needs: build
@@ -48,7 +52,7 @@ jobs:
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}${{ matrix.page-url }}
+      url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
     steps:
