@@ -24,9 +24,9 @@ jobs:
 
     - name: Build
       run: |
-        echo ls
-        npm install webpack html-webpack-plugin
-        npx webpack
+        ls
+#        npm install webpack html-webpack-plugin
+#        npx webpack
         
     - name: Upload generated files as artifact
       uses: actions/upload-pages-artifact@v3
