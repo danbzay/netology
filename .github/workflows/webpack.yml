@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main" ]
     paths: 
-      - .github
-      - 9-JavaScript-browser
+      - '.github'
+      - '9-JavaScript-browser'
       
 jobs:
   build:
