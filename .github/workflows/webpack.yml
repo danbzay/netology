@@ -24,15 +24,15 @@ jobs:
 
     - name: Build
       run: |
-        ls
-#        npm install webpack html-webpack-plugin
-#        npx webpack
+        cd 9-JavaScript-browser/2-DOM/hit-game/        
+        npm install webpack webpacl-cli html-webpack-plugin
+        npx webpack
         
     - name: Upload generated files as artifact
       uses: actions/upload-pages-artifact@v3
       id: deployment
       with:
-        path: dist/
+        path: 9-JavaScript-browser/2-DOM/hit-game/dist/
           
   deploy:
     needs: build
