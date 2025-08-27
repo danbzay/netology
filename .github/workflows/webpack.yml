@@ -15,7 +15,7 @@ jobs:
         node-version: [22.x]
         include:
           - page-path: '9-JavaScript-browser/2-DOM/hit-game/'
-            page-url: 'hit-game'            
+            page-name: 'hit-game'            
 
     steps:
     - uses: actions/checkout@v4
@@ -27,27 +27,18 @@ jobs:
 
     - name: Build
       run: |
-        echo ${{ matrix.page-path }}dist/
-        echo ${{ steps.deployment.outputs.page_url }}${{ matrix.page-url }}
         cd ${{ matrix.page-path }}        
         npm install webpack webpack-cli html-webpack-plugin
         npx webpack
-        mkdir -p /home/runner/work/_temp/dist/${{ matrix.page-url }}
-        cp -r dist/* /home/runner/work/_temp/dist/${{ matrix.page-url }}
 
-  upload:
-    runs-on: ubuntu-latest
-    needs: build
-    
-    steps:
-    - name: Upload Pages
-      uses: actions/upload-pages-artifact@v3
-      id: deployment
+    - name: Upload Page Artifact
+      uses: actions/upload-artifact@v3
       with:
-        path: /home/runner/work/_temp/dist
+        path: ${{ matrix.page-path }}dist 
+        name: ${{ matrix.page-name }}
           
   deploy:
-    needs: [build, upload]
+    needs: build
     permissions:
       pages: write
       id-token: write
@@ -57,7 +48,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
+    
     steps:
+    - name: Download and Combine Pages
+      uses: actions/download-artifact@v5
+        
+    - name: Display structure of downloaded files
+      run: ls -R
+
+    - name: Upload Combined Pages Artifact
+      uses: actions/upload-pages-artifact@v4
+      with:
+        path: ${{ github.workspace }}      
+        name: combined
+    
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v4
       id: deployment
+      with:
+        name: combined
