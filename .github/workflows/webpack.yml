@@ -1,0 +1,51 @@
+name: NodeJS with Webpack
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        echo ls
+        npm install webpack html-webpack-plugin
+        npx webpack
+        
+    - name: Upload generated files as artifact
+      uses: actions/upload-pages-artifact@v3
+      id: deployment
+      with:
+        path: dist/
+          
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4
+      id: deployment
