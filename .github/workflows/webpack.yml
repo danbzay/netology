@@ -28,7 +28,7 @@ jobs:
     - name: Build
       run: |
         cd ${{ matrix.page-path }}        
-        npm install webpack webpack-cli html-webpack-plugin
+        npm install  # webpack webpack-cli html-webpack-plugin
         npx webpack
 
     - name: Upload Page Artifact
