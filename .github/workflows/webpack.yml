@@ -3,8 +3,8 @@ name: Multiple Homeworks Publishing
 on:
   push:
     branches: [ "main" ]
-    #paths: 
-    #  - '9-JavaScript-browser'
+    paths: 
+      - '9-JavaScript-browser'
       
 jobs:
   build:
@@ -15,7 +15,9 @@ jobs:
         node-version: [22.x]
         include:
           - page-path: '9-JavaScript-browser/2-DOM/hit-game/'
-            page-name: 'hit-game'            
+            page-name: 'hit-game'  
+          - page-path: '9-JavaScript-browser/2-DOM/loading-sorting/'
+            page-name: 'loading-sorting'
 
     steps:
     - uses: actions/checkout@v4
@@ -28,7 +30,7 @@ jobs:
     - name: Build
       run: |
         cd ${{ matrix.page-path }}        
-        npm install  # webpack webpack-cli html-webpack-plugin
+        npm install
         npx eslint
         npx webpack
 
