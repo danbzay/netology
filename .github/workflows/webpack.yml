@@ -13,12 +13,13 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
         include:
           - page-path: '9-JavaScript-browser/2-DOM/hit-game/'
             page-name: 'hit-game'  
+            node-version: 22.x
           - page-path: '9-JavaScript-browser/2-DOM/loading-sorting/'
             page-name: 'loading-sorting'
+            node-version: 22.x
 
     steps:
     - uses: actions/checkout@v4
