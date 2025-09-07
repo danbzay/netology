@@ -30,7 +30,7 @@ const rows = [...moviesTable.querySelectorAll('tr')];
 const dataKeys = Object.keys(rows[0].dataset);
 let p = document.createElement('p');
 
-const sortIntervalID = setInterval( () => {
+setInterval( () => {
   sortCounter %= 8;
   rows.sort(compareRows);  
   for ( const row in rows ) {
@@ -46,8 +46,8 @@ function compareRows(a, b) {
   const aString = a.dataset[dataKeys[Math.floor(sortCounter/2)]];    
   const bString = b.dataset[dataKeys[Math.floor(sortCounter/2)]];
   //compare strings with removed numbers
-  let result = aString.replace(/[\d\.]/g, '')
-    .localeCompare(bString.replace(/[\d\.]/g, ''));
+  let result = aString.replace(/[\d.]/g, '')
+    .localeCompare(bString.replace(/[\d.]/g, ''));
   //compare numbers if equal
   if (result == 0) {
     result = Number(aString) - Number(bString);
