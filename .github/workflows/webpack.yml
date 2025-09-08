@@ -32,11 +32,9 @@ jobs:
         git log --oneline
  
     - name: Check if page modified
-      id: page
-      
+      id: page    
+      run: |  
         # git show --dirstat HEAD | grep -q ${{ matrix.page-path }}
-      run: |
-        git show --dirstat HEAD
         echo 'check ${{ matrix.page-path }}:' $?
         echo 'page_modified'=$? >> $GITHUB_OUTPUT
 
