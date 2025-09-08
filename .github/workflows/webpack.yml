@@ -36,7 +36,7 @@ jobs:
       run: |  
         git show --dirstat HEAD
         git show --dirstat HEAD | grep ${{ matrix.page-name }} || # using page-name to avoid strings transform
-        echo 'page_modified=false >> $GITHUB_OUTPUT
+        echo 'page_modified=false' >> $GITHUB_OUTPUT
 
     - name: Check artifact if page not modified
       id: check_artifact
