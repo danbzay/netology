@@ -35,7 +35,8 @@ jobs:
       id: page    
       run: |  
         git show --dirstat HEAD
-        echo 'test' | grep test
+        echo 'test' | grep tet
+        echo 'test' | grep test/tet
         echo $?
         git show --dirstat HEAD | grep -q github # ${{ matrix.page-path }}
         echo 'check ${{ matrix.page-path }}:' $?
