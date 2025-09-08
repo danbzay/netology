@@ -23,6 +23,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+          fetch-depth: 0
+
+      - name: Display all commits
+        run: |
+          echo "All commits in the repository:"
+          git log --oneline
  
     - name: Check if page modified
       id: page
