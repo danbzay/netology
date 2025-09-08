@@ -33,7 +33,7 @@ jobs:
 
     - name: Check artifact if page not modified
       id: check_artifact
-      if: $ {{steps.check_page.outputs.page_modified == 0 }}
+      if: ${{steps.check_page.outputs.page_modified == 0 }}
       uses: softwareforgood/check-artifact-v4-existance@v1
       with: 
         name: ${{ matrix.page-name }}
