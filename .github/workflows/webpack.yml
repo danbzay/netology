@@ -28,8 +28,8 @@ jobs:
       id: page
       run: |
         git show --dirstat HEAD | grep -q ${{ matrix.page-path }}
-	echo 'check ${{ matrix.page-path }}: $?
-	echo 'page_modified'=$? >> $GITHUB_OUTPUT
+        echo 'check ${{ matrix.page-path }}: $?'
+        echo 'page_modified'=$? >> $GITHUB_OUTPUT
 
     - name: Check artifact if page not modified
       id: check_artifact
@@ -41,7 +41,7 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       if: | 
         ${{ (steps.check_page.outputs.page_modified != 0) || 
-	steps.check_artifact.outputs.exist == false }}  
+        steps.check_artifact.outputs.exist == false }}  
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
@@ -49,7 +49,7 @@ jobs:
     - name: Build
       if: | 
         ${{ (steps.check_page.outputs.page_modified != 0) || 
-	steps.check_artifact.outputs.exist == false }}  
+        steps.check_artifact.outputs.exist == false }}  
       run: |
         cd ${{ matrix.page-path }}        
         npm install
@@ -59,7 +59,7 @@ jobs:
     - name: Upload Page Artifact
       if: | 
         ${{ (steps.check_page.outputs.page_modified != 0) || 
-	steps.check_artifact.outputs.exist == false }}  
+        steps.check_artifact.outputs.exist == false }}  
       uses: actions/upload-artifact@v4
       with:
         path: ${{ matrix.page-path }}dist 
