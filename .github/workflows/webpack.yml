@@ -26,22 +26,18 @@ jobs:
       with:
           fetch-depth: 0
 
-    - name: Display all commits
-      run: |
-        echo "All commits in the repository:"
-        git log --oneline
- 
     - name: Check if page modified
-      id: page    
+      id: check_page    
       run: |  
-        git show --dirstat HEAD
-        git show --dirstat HEAD | grep ${{ matrix.page-name }} || # using page-name to avoid strings transform
-        echo 'page_modified=false' >> $GITHUB_OUTPUT
+        regex_page_path=$(echo "${{ matrix.page-path }}" | sed 's/[.\/]/\\&/g')
+        git show --dirstat HEAD        
+        git show --dirstat HEAD | grep $regex_page_path || 
+          echo 'page_modified=false' >> $GITHUB_OUTPUT
 
     - name: Check artifact if page not modified
       id: check_artifact
-      if: ${{steps.check_page.outputs.page_modified == 0 }}
-      uses: softwareforgood/check-artifact-v4-existence@v0
+      if: ${{steps.check_page.outputs.page_modified != false }}
+      uses: actions/download-artifact@v4
       with: 
         name: ${{ matrix.page-name }}
 
