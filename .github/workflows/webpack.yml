@@ -26,10 +26,11 @@ jobs:
  
     - name: Check if page modified
       id: page
+      
+        # git show --dirstat HEAD | grep -q ${{ matrix.page-path }}
       run: |
-# git show --dirstat HEAD | grep -q ${{ matrix.page-path }}
         git show --dirstat HEAD
-        echo 'check ${{ matrix.page-path }}: $?'
+        echo 'check ${{ matrix.page-path }}:' $?
         echo 'page_modified'=$? >> $GITHUB_OUTPUT
 
     - name: Check artifact if page not modified
