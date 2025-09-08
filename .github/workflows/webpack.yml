@@ -40,11 +40,12 @@ jobs:
       uses: actions/download-artifact@v4
       with: 
         name: ${{ matrix.page-name }}
+        run-id: ${{ github.event.inputs.source_run_id }}
 
     - name: Use Node.js ${{ matrix.node-version }}
       if: | 
         ${{ (steps.check_page.outputs.page_modified != 0) || 
-        steps.check_artifact.outputs.exist == false }}  
+        steps.check_artifact.outputs.exist != true }}  
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
