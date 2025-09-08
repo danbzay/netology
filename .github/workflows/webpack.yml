@@ -35,11 +35,8 @@ jobs:
       id: page    
       run: |  
         git show --dirstat HEAD
-        echo 'test' | grep tet
-        echo $?
-        git show --dirstat HEAD | grep -q github # ${{ matrix.page-path }}
-        echo 'check ${{ matrix.page-path }}:' $?
-        echo 'page_modified'=$? >> $GITHUB_OUTPUT
+        git show --dirstat HEAD | grep ${{ matrix.page-name }} || # using page-name to avoid strings transform
+        echo 'page_modified=false >> $GITHUB_OUTPUT
 
     - name: Check artifact if page not modified
       id: check_artifact
