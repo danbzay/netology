@@ -6,6 +6,9 @@ on:
     paths: 
       - '.github/**'
       - '9-JavaScript-browser/**'
+
+env:
+  HOME_URL: 'https://danbzay.github.io/netology/'
       
 jobs:
   build:
@@ -26,34 +29,33 @@ jobs:
       with:
           fetch-depth: 0
 
-    - name: Check if page modified
-      id: check_page    
+    - name: Create home page
+      run: 
+
+    - name: Save old version of page if actual
+      id: old_page
       run: |  
         regex_page_path=$(echo "${{ matrix.page-path }}" | sed 's/[.\/]/\\&/g')
         git show --dirstat HEAD        
-        git show --dirstat HEAD | grep $regex_page_path || 
-          echo 'page_modified=false' >> $GITHUB_OUTPUT
+        git show --dirstat HEAD | grep ($regex_page_path|github) || 
+          wget -r -np ${{ HOME_URL }}${{ matrix.page-name }} &&
+          echo 'saved=true' >> $GITHUB_OUTPUT
 
-    - name: Check artifact if page not modified
-      id: check_artifact
-      if: ${{steps.check_page.outputs.page_modified != false }}
-      uses: actions/download-artifact@v4
-      with: 
-        name: ${{ matrix.page-name }}
-        run-id: ${{ github.event.inputs.source_run_id }}
+    - name: Check page existance if not modified
+      id: check_page_exist
+      if: ${{steps.old_page.outputs.saved != true }}
+      run: | 
+        wget -r -np ${{ HOME_URL }}${{ matrix.page-name }} ||           
+          echo 'exist=false' >> $GITHUB_OUTPUT
 
     - name: Use Node.js ${{ matrix.node-version }}
-      if: | 
-        ${{ (steps.check_page.outputs.page_modified != 0) || 
-        steps.check_artifact.outputs.exist != true }}  
+      if: ${{steps.old_page.outputs.saved != true }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
    
     - name: Build
-      if: | 
-        ${{ (steps.check_page.outputs.page_modified != 0) || 
-        steps.check_artifact.outputs.exist == false }}  
+      if: ${{steps.old_page.outputs.saved != true }}
       run: |
         cd ${{ matrix.page-path }}        
         npm install
@@ -61,9 +63,7 @@ jobs:
         npx webpack
 
     - name: Upload Page Artifact
-      if: | 
-        ${{ (steps.check_page.outputs.page_modified != 0) || 
-        steps.check_artifact.outputs.exist == false }}  
+      if: ${{steps.old_page.outputs.saved != true }}
       uses: actions/upload-artifact@v4
       with:
         path: ${{ matrix.page-path }}dist 
