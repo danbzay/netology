@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import ShopItemFunc from './components/ShopItemFunc.jsx'
+import ShopItemClass from './components/ShopItemClass.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const item = {
+    brand: 'Tiger of Sweden',
+    title: 'Leonard coat',
+    description: 'Minimalistic coat in cotton-blend',
+    descriptionFull: 'Men\'s minimalistic overcoat in cotton-blend. Features a stand-up collar, concealed front closure and single back vent. Slim fit with clean, straight shape. Above-knee length.',
+    price: 399,
+    currency: '£'
+  }
 
   return (
-    <>
-    XCZGSZDX
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <div className="background-element">
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="highlight-window">
+        <div className='highlight-overlay'></div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <div className="window">
+        <ShopItemFunc item={item} />
+      </div>
+      <div className="window">
+        <ShopItemClass item={item} />
+      </div>
+    </div>
   )
 }
 
